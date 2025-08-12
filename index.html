@@ -186,6 +186,38 @@
                 box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
             }
         }
+
+        /* Thank You Message Animation */
+        .thank-you-popup {
+            animation: thankYouSlideIn 0.5s ease-out;
+        }
+        
+        @keyframes thankYouSlideIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(-50px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .success-bounce {
+            animation: successBounce 0.6s ease-out;
+        }
+        
+        @keyframes successBounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
     </style>
 </head>
 <body class="font-sans bg-light-gray">
@@ -295,11 +327,12 @@
                     <h3 class="text-2xl font-serif font-bold text-gray-800 mb-2">Get Free Quote</h3>
                     <p class="text-gray-600">Tell us about your event and get instant pricing</p>
                 </div>
-                <form action="https://formsubmit.co/newuniqueflowerdecor@gmail.com" method="POST" class="space-y-4">
+                <form action="https://formsubmit.co/newuniqueflowerdecor@gmail.com" method="POST" class="space-y-4" id="heroForm">
                     <!-- FormSubmit Configuration -->
-                    <input type="hidden" name="_subject" value="New Inquiry from Website">
+                    <input type="hidden" name="_subject" value="New Inquiry from Website - Hero Form">
                     <input type="hidden" name="_captcha" value="false">
                     <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_next" value="https://yourusername.github.io/flower-decoration-website?success=hero">
                     
                     <div>
                         <input type="text" name="name" placeholder="Your Name *" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-red focus:border-transparent">
@@ -725,11 +758,12 @@
                     </div>
                 </div>
                 <div>
-                    <form action="https://formsubmit.co/newuniqueflowerdecor@gmail.com" method="POST" class="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg">
+                    <form action="https://formsubmit.co/newuniqueflowerdecor@gmail.com" method="POST" class="bg-gradient-to-br from-gray-50 to-white p-8 rounded-2xl shadow-lg" id="contactForm">
                         <!-- FormSubmit Configuration -->
                         <input type="hidden" name="_subject" value="New Contact Form Submission">
                         <input type="hidden" name="_captcha" value="false">
                         <input type="hidden" name="_template" value="table">
+                        <input type="hidden" name="_next" value="https://yourusername.github.io/flower-decoration-website?success=contact">
                         
                         <h3 class="text-2xl font-serif font-semibold text-gray-800 mb-6">Send us a Message</h3>
                         <div class="space-y-6">
@@ -855,12 +889,13 @@
                 <h3 class="text-2xl font-serif font-bold text-gray-800 mb-2">Special Offer!</h3>
                 <p class="text-gray-600">Get 20% OFF on your first flower decoration order</p>
             </div>
-            <form action="https://formsubmit.co/newuniqueflowerdecor@gmail.com" method="POST" class="space-y-4">
+            <form action="https://formsubmit.co/newuniqueflowerdecor@gmail.com" method="POST" class="space-y-4" id="popupForm">
                 <!-- FormSubmit Configuration -->
                 <input type="hidden" name="_subject" value="Special Offer Lead - 20% Discount">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
                 <input type="hidden" name="lead_source" value="Popup - 20% Discount Offer">
+                <input type="hidden" name="_next" value="https://yourusername.github.io/flower-decoration-website?success=popup">
                 
                 <div>
                     <input type="text" name="name" placeholder="Your Name *" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-red focus:border-transparent">
@@ -1023,11 +1058,96 @@
             }
         });
 
-        // Form submission success handling
+        // Enhanced Form submission success handling with beautiful thank you messages
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('success') === 'true') {
-            alert('Thank you for your inquiry! We will contact you soon with your personalized quote and details.');
+        const successType = urlParams.get('success');
+        
+        if (successType) {
+            showThankYouMessage(successType);
+        }
+        
+        function showThankYouMessage(type) {
+            let message = '';
+            let icon = '';
+            let title = '';
+            
+            switch(type) {
+                case 'hero':
+                    title = 'Quote Request Received! 🌸';
+                    message = 'Thank you for your inquiry!<br><br>We will contact you within <strong>2 hours</strong> with your personalized quote and beautiful decoration ideas.<br><br>Our team is already preparing creative suggestions for your special event!';
+                    icon = 'fas fa-heart';
+                    break;
+                case 'contact':
+                    title = 'Message Sent Successfully! 📞';
+                    message = 'Thank you for reaching out to us!<br><br>Our team will call you back within <strong>1 hour</strong> to discuss your requirements in detail.<br><br>We are excited to help make your event beautiful!';
+                    icon = 'fas fa-phone';
+                    break;
+                case 'popup':
+                    title = 'Congratulations! 🎉';
+                    message = 'Your <strong>20% discount</strong> is confirmed!<br><br>We will WhatsApp you the discount details and our service catalog within <strong>30 minutes</strong>.<br><br>Thank you for choosing New Unique Flower Decor!';
+                    icon = 'fas fa-gift';
+                    break;
+                default:
+                    title = 'Thank You! 💐';
+                    message = 'Thank you for contacting us!<br><br>We will get back to you very soon with all the details you need.<br><br>Your beautiful event awaits!';
+                    icon = 'fas fa-check-circle';
+            }
+            
+            // Create and show thank you popup
+            const thankYouPopup = document.createElement('div');
+            thankYouPopup.className = 'fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center thank-you-popup';
+            thankYouPopup.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-lg mx-4 text-center success-bounce">
+                    <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                        <i class="${icon} text-white text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-serif font-bold text-gray-800 mb-4">${title}</h3>
+                    <div class="text-gray-600 mb-6 leading-relaxed">${message}</div>
+                    <div class="space-y-3 mb-6">
+                        <a href="https://wa.me/917011043864?text=Hi! I just submitted a form on your website. Looking forward to hearing from you!" target="_blank" class="bg-green-500 hover:bg-green-600 inline-flex items-center justify-center px-6 py-3 text-white font-semibold rounded-full w-full transition-colors">
+                            <i class="fab fa-whatsapp mr-2"></i>Chat on WhatsApp Now
+                        </a>
+                        <button onclick="this.parentElement.parentElement.parentElement.remove()" class="bg-gray-500 hover:bg-gray-600 inline-flex items-center justify-center px-6 py-3 text-white font-semibold rounded-full w-full transition-colors">
+                            <i class="fas fa-times mr-2"></i>Close Message
+                        </button>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-4 text-sm text-gray-600">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <i class="fas fa-clock text-primary-red mr-1"></i>
+                                <strong>Response Time:</strong><br>
+                                Within 2 hours
+                            </div>
+                            <div>
+                                <i class="fas fa-phone text-primary-red mr-1"></i>
+                                <strong>Call Us:</strong><br>
+                                <a href="tel:+917011043864" class="text-primary-red font-semibold">+91 7011043864</a>
+                            </div>
+                        </div>
+                        <div class="mt-3 pt-3 border-t border-gray-200">
+                            <i class="fas fa-star text-yellow-400 mr-1"></i>
+                            <strong>500+ Happy Customers</strong> • <strong>1200+ Events Decorated</strong>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(thankYouPopup);
+            
+            // Auto close after 15 seconds
+            setTimeout(() => {
+                if (thankYouPopup.parentNode) {
+                    thankYouPopup.style.opacity = '0';
+                    setTimeout(() => {
+                        thankYouPopup.remove();
+                    }, 300);
+                }
+            }, 15000);
+            
+            // Remove success parameter from URL
+            const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+            window.history.replaceState({path: newUrl}, '', newUrl);
         }
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96dd759700da49d5',t:'MTc1NDk3NTM1NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96ddab94346bcf00',t:'MTc1NDk3NzU2NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
